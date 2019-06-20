@@ -1,0 +1,34 @@
+%% load data and set parameters
+clear;clc
+flag_usedata = true;
+supplementary_function.generateData;
+%% prediction with true model (figure 3)
+% calculate result
+z_pred_trueModel = calculate_function.B2Bpredict_with_true_model(flag_usedata,spring_data,t_data,z_data,z_measure);
+% plot result
+plot_function.plot_B2Bprediction_with_true_model(z_pred_trueModel,envir_data.t_pred,envir_data.z_pred_true);
+%% behavior of true and inadequate model, and its difference (figure 2)
+plot_function.plot_True_and_inadequate_models(envir_data);
+%% consistency and k* \in F with inadequate model (table 1)
+CMresult = calculate_function.Dataset_consistency_and_kstart_in_feasible_set(flag_usedata,tdata,z_measure,envir_data);
+%% posterior uncertainy interval of k
+parameter_posterior_interval1 = calculate_function.B2Bposterior_interval_with_true_model(flag_usedata,spring_data,envir_data,t_data,z_measure);
+%% prediction with inadequate model (figure 4)
+% calculate result
+z_pred_inadequateModel = calculate_function.B2Bpredict_with_inadequate_model(flag_usedata,spring_data,z_measure,envir_data);
+% plot result
+plot_function.plot_B2Bprediction_with_inadequate_model(z_pred_inadequateModel,envir_data.t_pred,envir_data.z_pred_true);
+%% posterior uncertainy interval of k and c's (table 2)
+% calculate result
+parameter_posterior_interval2 = calculate_function.B2Bposterior_interval_with_inadequate_model(flag_usedata,spring_data,envir_data,t_data,z_measure);
+%% confounding (figure 6)
+confounding_mesh = spring_data.confounding_mesh
+
+%% posterior uncertainty of model discrepancy function (figure 7)
+% calculate posterior delta
+ngrid = 501;
+tRange = [0 4];
+[t_grid,delta_posterior] = calculate_function.B2Bposterior_delta(flag_usedata,spring_data,envir_data,t_data,z_measure,ngrid,CMresult,parameter_posterior_interval2,tRange);
+% plot result
+plot_function.plot_B2Bposterior_delta(delta_posterior,envir_data);
+
