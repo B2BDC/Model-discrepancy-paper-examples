@@ -1,5 +1,11 @@
 function y = Dataset_consistency_and_kstart_in_feasible_set(flag_usedata,spring_data,envir_data,tdata,z_measure)
+% Calculate dataset consistency and whether k* is in the feasible set with
+% the inadequate model
 
+% Output is a n_eps-by-(n+1) cell array. The 1st dimension corresponds to
+% the tested epsilon. The 2nd dimension corresponds to used model
+% discrepancy function delta, with the first column specifying the case
+% where no delta function is used.
 
 if flag_usedata
    y = spring_data.CMresult;

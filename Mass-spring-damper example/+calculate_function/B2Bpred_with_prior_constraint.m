@@ -1,4 +1,9 @@
 function y = B2Bpred_with_prior_constraint(flag_usedata,spring_data,envir_data,t_data,z_measure,post_interval,ntest)
+% Calculate the predicted interval with additional prior constraint on
+% model discrepancy function.
+
+% Output is a structure variable with calculated predicted interval at
+% various prior constraint parameter alpha values.
 
 if flag_usedata
    y = spring_data.prediction_with_prior_on_delta;

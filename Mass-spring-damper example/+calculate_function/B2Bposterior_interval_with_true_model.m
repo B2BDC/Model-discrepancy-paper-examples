@@ -1,4 +1,10 @@
 function y = B2Bposterior_interval_with_true_model(flag_usedata,spring_data,envir_data,tdata,z_measure)
+% Calculate the posterior interval of stiffness k. The B2BDC computation is
+% conducted with the true model.
+
+% Output is a cell array with length n_eps, corresponds to the tested
+% epsilon values. Each cell element is a structure array, with its fields
+% representing the name and posterior interval of calculated parameters.
 
 if flag_usedata
    y = spring_data.Posterior_with_true_model;

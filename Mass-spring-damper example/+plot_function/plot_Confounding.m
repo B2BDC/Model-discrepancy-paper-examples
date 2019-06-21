@@ -5,7 +5,7 @@ subplot(2,2,1);
 X = confounding_result.xmesh;
 Y = confounding_result.ymesh;
 Z = confounding_result.zmesh;
-[x,y,z] = subfun.createPatch3D(X,Y,Z);
+[x,y,z] = supplementary_function.createPatch3D(X,Y,Z);
 lims = [min(X(:)), max(X(:)); min(Y(:)), max(Y(:)); min(Z(:)) max(Z(:))];
 patch(x,y,z,10*z,'FaceAlpha',0.4,'FaceColor','interp','EdgeColor','interp');
 view(3)

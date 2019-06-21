@@ -1,4 +1,9 @@
 function y = B2Bposterior_delta(flag_usedata,spring_data,envir_data,t_data,z_measure,ndata,CMresult,c_posterior,tRange)
+% Calculate the posterior uncertainty interval of model discrepancy
+% function, for the cases of a quadratic and cubic delta.
+
+% Output is a structure variable with calculated minimum and maximum of the
+% discrepancy function over the specified scenario domain
 
 if flag_usedata
    y = spring_data.posterior_delta;

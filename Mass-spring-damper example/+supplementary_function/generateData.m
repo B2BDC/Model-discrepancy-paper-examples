@@ -1,3 +1,4 @@
+% This script sets up all relevant parameter values used in the example
 envir_data.k = 0.25;
 envir_data.b = 0.05;
 envir_data.z0 = -1.5;

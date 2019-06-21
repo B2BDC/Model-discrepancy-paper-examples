@@ -1,4 +1,12 @@
 function y = B2Bposterior_interval_with_inadequate_model(flag_usedata,spring_data,envir_data,tdata,z_measure)
+% Calculate the posterior interval of stiffness k. The B2BDC computation is
+% conducted with the inadequate model.
+
+% Output is a n_eps-by-(n+1) cell array, corresponding to the tested
+% epsilon and used discrepancy function, respectively. The first column
+% corresponds to the case where no delta is used. Each cell element is a 
+% structure array, with its fields representing the name and posterior 
+% interval of calculated parameters.
 
 if flag_usedata
    y = spring_data.Posterior_with_inadequate_model;

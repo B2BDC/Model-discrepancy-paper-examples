@@ -1,4 +1,8 @@
 function y = B2Bconfounding(flag_usedata,spring_data,envir_data,t_data,z_measure,ngrid)
+% Calculate the 3D feasible set and its 2D projections. The linear
+% delta and eps=0.01 case is used.
+
+% Output is a structure variable
 
 if flag_usedata
    y = spring_data.confounding_mesh;

@@ -22,11 +22,6 @@ for i = 1:nSample
 end
 yshift = 0.0186593;
 y_shift = x_mi(0.200265,tsample)+yshift;
-f=figure('Name','Model behavior','Units','inches');
-lp = [0.08 0.55];
-bp = 0.12;
-ww = 0.43;
-hh = 0.85;
 f = figure('Name','Model behavior over prior uncertainty of k','Units','inches');
 lp = [0.08 0.55];
 bp = 0.12;
