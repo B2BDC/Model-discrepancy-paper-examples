@@ -35,7 +35,7 @@ end
    function [y,gy] = fun_min(x)
       rr = 0.5*sqrt(4*x-b^2);
       drr = (4*x-b^2)^(-0.5);
-      c1 = v0/rr;
+      c1 = (v0+0.5*b*c2)/rr;
       dc1 = -c1*drr/rr;
       y = exp(-0.5*b*tpred)*(c1*sin(rr*tpred)+c2*cos(rr*tpred));
       gy = tpred*drr*exp(-0.5*b*tpred)*(c1*cos(rr*tpred)-c2*sin(rr*tpred))+...
@@ -45,7 +45,7 @@ end
    function [y,gy] = fun_max(x)
       rr = 0.5*sqrt(4*x-b^2);
       drr = (4*x-b^2)^(-0.5);
-      c1 = v0/rr;
+      c1 = (v0+0.5*b*c2)/rr;
       dc1 = -c1*drr/rr;
       y = -exp(-0.5*b*tpred)*(c1*sin(rr*tpred)+c2*cos(rr*tpred));
       gy = -tpred*drr*exp(-0.5*b*tpred)*(c1*cos(rr*tpred)-c2*sin(rr*tpred))-...
@@ -55,7 +55,7 @@ end
    function [c,ceq,g,geq] = neq(x)
       rr = 0.5*sqrt(4*x-b^2);
       drr = (4*x-b^2)^(-0.5);
-      c1 = v0/rr;
+      c1 = (v0+0.5*b*c2)/rr;
       dc1 = -c1*drr/rr;
       c = zeros(2*nD,1);
       g = zeros(1,2*nD);

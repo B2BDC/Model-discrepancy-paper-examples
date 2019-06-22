@@ -17,7 +17,7 @@ plot(xx,z_true(xx),'r-','LineWidth',2);
 plot(xx,z_inadequate(xx),'b-','LineWidth',2);
 hold off
 ylabel('Displacement','Position',[-0.2914 0.4948]);
-text(2.7362,1.3994,'{\itz}^*({\itk}^*, {\itt})','FontSize',15,'Color','r')
+text(2.7688,1.3443,'{\itz}^*({\itk}^*, {\itt})','FontSize',15,'Color','r')
 text(2.1954,1.8540,'{\itz}({\itk}^*, {\itt})','FontSize',15,'Color','b')
 set(gca,'FontSize',15,'LineWidth',1.5,'XLim',[0 4],'XTick',1:4,...
    'Position',[0.1 0.12 0.8 0.84],'YLim',[-2 3],'YTick',-2:2.5:3)

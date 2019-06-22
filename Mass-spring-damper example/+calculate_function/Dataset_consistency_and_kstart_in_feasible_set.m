@@ -71,8 +71,8 @@ end
       geq = [];
       Tfit = supplementary_function.makePower(tdata,j);      
       yy = c1*sin(rr*tdata)+c2*cos(rr*tdata)+Tfit*x;
-      c(1:nD) = yy-zdata-eps;
-      c(nD+1:end) = zdata-eps-yy;
+      c(1:nD) = yy-zdata-eps(i);
+      c(nD+1:end) = zdata-eps(i)-yy;
       g(:,1:nD) = Tfit';
       g(:,nD+1:end) = -g(:,1:nD);
    end

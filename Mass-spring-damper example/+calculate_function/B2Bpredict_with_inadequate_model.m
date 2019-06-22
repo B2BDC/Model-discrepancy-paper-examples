@@ -1,4 +1,4 @@
-function y = B2Bpredict_with_inadequate_model(flag_usedata,spring_data,t_data,z_measure,envir_data)
+function y = B2Bpredict_with_inadequate_model(flag_usedata,spring_data,envir_data,t_data,z_measure,CMresult)
 % Calculate B2BDC predicted interval using the inadequate model
 
 % Output is a n_eps-by-2-by-n_pred matrix with its 1st, and 3rd dimensions
@@ -21,8 +21,12 @@ else
       Hc = repmat([-inf inf],i,1);
       y{i+1} = zeros(n_eps,2,n_pred);
       for j = 1:n_eps
-         for k = 1:n_pred
-            y(j,:,k) = supplementary_function.makePrediction(t_data,z_measure{j},t_pred(k),eps(j),Hc,n,c2,v0);
+         if strcmp(CMresult{j,i+1},'Dataset is inconsistent')
+            y{i+1}(j,:,:) = repmat([inf -inf],1,1,n_pred);
+         else
+            for k = 1:n_pred
+               y{i+1}(j,:,k) = supplementary_function.makePrediction(t_data,z_measure{j},t_pred(k),eps(j),Hc,n,c2,v0);
+            end
          end
       end
    end

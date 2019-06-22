@@ -3,7 +3,7 @@ function plot_B2Bprediction_with_true_model(zPred,tpred,zTrue)
 xLab = {'0.10','0.05'};
 xx = [1, 2];
 xl = [0.5 2.5];
-yl = {0.24:0.02:0.28, 1.88:0.01:1.9, 2.19:0.02:2.23};
+yl = {0.19:0.02:0.23, 1.81:0.01:1.83, 2.13:0.02:2.17};
 f = figure('Name','Prediction with M*');
 set(f,'Units','inches','Position',[4 2 8 3.2]);
 bp = repmat(0.15,1,3);

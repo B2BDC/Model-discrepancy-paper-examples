@@ -4,7 +4,7 @@ envir_data.b = 0.05;
 envir_data.z0 = -1.5;
 envir_data.v0 = 1;
 envir_data.lambda = 0.5*sqrt(4*envir_data.k-envir_data.b^2);
-envir_data.c1 = envir_data.v0/envir_data.lambda;
+envir_data.c1 = (envir_data.v0+0.5*envir_data.b*envir_data.z0)/envir_data.lambda;
 envir_data.c2 = envir_data.z0;
 z_true = @(t) exp(-0.5*envir_data.b*t).*(envir_data.c1*sin(envir_data.lambda*t)+envir_data.c2*cos(envir_data.lambda*t));
 envir_data.H_t = [0 3];
@@ -15,7 +15,7 @@ envir_data.z_pred_true = z_true(envir_data.t_pred);
 envir_data.n_pred = length(envir_data.t_pred);
 envir_data.eps = [0.1 0.05];
 envir_data.n_eps = length(envir_data.eps);
-envir_data.n_start = 1;
+envir_data.n_start = 10;
 envir_data.n_polytest = 4;
 envir_data.seedID = 20;
 if flag_usedata

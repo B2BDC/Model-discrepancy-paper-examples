@@ -17,11 +17,11 @@ else
    n_eps = length(eps);
    H = envir_data.H_k;
    y = cell(2,1);
+   nD = length(tdata);
    opt = optimoptions('fmincon','Display','off','MaxFunctionEvaluations',1e4,...
       'ConstraintTolerance',1e-6,'OptimalityTolerance',1e-14,'MaxIterations',1e3,...
       'GradConstr','on','GradObj','on','DerivativeCheck','off','FiniteDifferenceType','central');
    for i = 1:n_eps 
-      nD = res.datasize;
       ydata = z_measure{i};
       x_start = 0.1*rand(2*n,1)+0.2;
       y_min = zeros(n,1);
@@ -66,7 +66,7 @@ end
    function [c,ceq,g,geq] = neq(x)
       rr = sqrt(x);
       drr = 0.5/rr;
-      c1 = v0/rr;
+      c1 = (v0+0.5*b*c2)/rr;
       dc1 = -c1*drr/rr;
       c = zeros(2*nD,1);
       g = zeros(1,2*nD);

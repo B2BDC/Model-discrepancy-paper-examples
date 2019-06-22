@@ -1,4 +1,4 @@
-function plot_prior_constrain_on_delta(pred_with_prior_constraint,pred_no_prior,envir_data)
+function plot_prior_constrain_on_delta(pred_with_prior_constraint,pred_no_prior,envir_data,ntest)
 
 zPred = pred_with_prior_constraint.prediction;
 alpha_opt = pred_with_prior_constraint.minimal_alpha;
@@ -7,7 +7,7 @@ tpred = envir_data.t_pred;
 zTrue = envir_data.z_pred_true;
 zInf = permute(pred_no_prior(1,:,:),[3,2,1]);
 xl = {[0:0.004:0.02 0.024 0.028 0.032],[0:0.01:0.05 0.06 0.07 0.08],[0:0.02:0.1 0.12 0.14 0.16]};
-yl = {0.18:0.07:0.32, 1.4:0.5:2.4, 0.8:1.4:3.6};
+yl = {0.13:0.07:0.27, 1.4:0.5:2.4, 0.6:1.6:3.8};
 f = figure('Name','Prediction with prior constraint on \delta');
 set(f,'Units','inches','Position',[4 2 8 6]);
 lp = 0.12;
@@ -16,7 +16,7 @@ ww = 0.84;
 hh = 0.25;
 for i = 1:3
    yy = zPred(:,:,i);
-   xx = linspace(alpha_opt(i),alpha(i),11);
+   xx = linspace(alpha_opt(i),alpha(i),ntest+1);
    xx = xx(2:end);
    subplot(3,1,i);
    hold on;

@@ -18,7 +18,7 @@ else
       'ConstraintTolerance',1e-6,'OptimalityTolerance',1e-14,'MaxIterations',1e3,...
       'GradConstr','on','GradObj','on','DerivativeCheck','off','FiniteDifferenceType','central');
    n_poly = 2;
-   Tfit = supplementary_function.makePower(tdata,n_poly);
+   Tfit = supplementary_function.makePower(t_data,n_poly);
    H = repmat([-inf,inf],n_poly,1);
    kdata = linspace(Hk(1),Hk(2),ngrid);
    kmesh = repmat(kdata,ngrid,1);
@@ -117,7 +117,7 @@ else
       y_max = zeros(n,1);
       exitflag_min = zeros(n,1);
       exitflag_max = zeros(n,1);
-      H = [0.2 0.3;-mag mag];
+      H = [0.2 0.3;-inf inf];
       for j = 1:n
          [~,y_min(j),exitflag_min(j)] = fmincon(@fun_min4,x_start(2*j-1,:)',[],[],[],[],...
             H(:,1),H(:,2),@neq_MI3,opt);
@@ -198,7 +198,7 @@ end
       g = zeros(n_poly,2*nD);
       ceq = [];
       geq = [];
-      yy = c1*sin(rr*tdata)+c2*cos(rr*tdata)+Tfit*x;
+      yy = c1*sin(rr*t_data)+c2*cos(rr*t_data)+Tfit*x;
       c(1:nD) = yy-ydata-eps;
       c(nD+1:end) = ydata-eps-yy;
       g(:,1:nD) = Tfit';
@@ -212,7 +212,7 @@ end
       g = zeros(n_poly-1,2*nD);
       ceq = [];
       geq = [];
-      yy = c1*sin(rr*tdata)+c2*cos(rr*tdata)+Tfit*[c0data(j);x];
+      yy = c1*sin(rr*t_data)+c2*cos(rr*t_data)+Tfit*[c0data(j);x];
       c(1:nD) = yy-ydata-eps;
       c(nD+1:end) = ydata-eps-yy;
       g(:,1:nD) = Tfit(:,2:end)';
@@ -228,10 +228,10 @@ end
       g = zeros(n_poly,2*nD);
       ceq = [];
       geq = [];
-      yy = c1*sin(rr*tdata)+c2*cos(rr*tdata)+Tfit*[c0data(i);x(2)];
+      yy = c1*sin(rr*t_data)+c2*cos(rr*t_data)+Tfit*[c0data(i);x(2)];
       c(1:nD) = yy-ydata-eps;
       c(nD+1:end) = ydata-eps-yy;
-      g(1,1:nD) = drr*tdata.*(c1*cos(rr*tdata)-c2*sin(rr*tdata))+dc1*sin(rr*tdata);
+      g(1,1:nD) = drr*t_data.*(c1*cos(rr*t_data)-c2*sin(rr*t_data))+dc1*sin(rr*t_data);
       g(2,1:nD) = Tfit(:,2:end)';
       g(:,nD+1:end) = -g(:,1:nD);
    end

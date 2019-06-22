@@ -13,7 +13,7 @@ plot_function.plot_True_and_inadequate_models(envir_data);
 
 %% prediction with true model (figure 3)
 % calculate result
-z_pred_trueModel = calculate_function.B2Bpredict_with_true_model(flag_usedata,spring_data,t_data,z_data,z_measure);
+z_pred_trueModel = calculate_function.B2Bpredict_with_true_model(flag_usedata,spring_data,envir_data,t_data,z_measure);
 % plot result
 plot_function.plot_B2Bprediction_with_true_model(z_pred_trueModel,envir_data.t_pred,envir_data.z_pred_true);
 
@@ -22,7 +22,7 @@ CMresult = calculate_function.Dataset_consistency_and_kstart_in_feasible_set(fla
 
 %% prediction with inadequate model (figure 4)
 % calculate result
-z_pred_inadequateModel = calculate_function.B2Bpredict_with_inadequate_model(flag_usedata,spring_data,z_measure,envir_data);
+z_pred_inadequateModel = calculate_function.B2Bpredict_with_inadequate_model(flag_usedata,spring_data,envir_data,t_data,z_measure,CMresult);
 % plot result
 plot_function.plot_B2Bprediction_with_inadequate_model(z_pred_inadequateModel,envir_data.t_pred,envir_data.z_pred_true);
 
@@ -31,23 +31,23 @@ parameter_posterior_interval1 = calculate_function.B2Bposterior_interval_with_tr
 
 %% posterior uncertainy interval of k and c's using the inadequate model (table 2)
 % calculate result
-parameter_posterior_interval2 = calculate_function.B2Bposterior_interval_with_inadequate_model(flag_usedata,spring_data,envir_data,t_data,z_measure);
+parameter_posterior_interval2 = calculate_function.B2Bposterior_interval_with_inadequate_model(flag_usedata,spring_data,envir_data,t_data,z_measure,CMresult);
 
 %% model behavior over stiffness prior uncertainty (figure 5)
 plot_function.plot_model_behavior_over_prior(envir_data,t_data,z_measure);
 
 %% confounding (figure 6)
 % calculate result
-ngrid = 51;
-confounding_mesh = calculate_function.B2Bconfounding(flag_usedata,spring_data,envir_data,t_data,z_measure,ngrid);
+n_grid = 51;
+confounding_mesh = calculate_function.B2Bconfounding(flag_usedata,spring_data,envir_data,t_data,z_measure,n_grid);
 % plot result
 plot_function.plot_Confounding(confounding_mesh);
 
 %% posterior uncertainty of model discrepancy function (figure 7)
 % calculate posterior delta
-ngrid = 501;
+n_grid = 501;
 tRange = [0 4];
-delta_posterior = calculate_function.B2Bposterior_delta(flag_usedata,spring_data,envir_data,t_data,z_measure,ngrid,CMresult,parameter_posterior_interval2,tRange);
+delta_posterior = calculate_function.B2Bposterior_delta(flag_usedata,spring_data,envir_data,t_data,z_measure,n_grid,CMresult,parameter_posterior_interval2,tRange);
 % plot result
 plot_function.plot_B2Bposterior_delta(delta_posterior,envir_data);
 
@@ -56,4 +56,8 @@ plot_function.plot_B2Bposterior_delta(delta_posterior,envir_data);
 ntest = 10;
 pred_with_prior_constraint = calculate_function.B2Bpred_with_prior_constraint(flag_usedata,spring_data,envir_data,t_data,z_measure,parameter_posterior_interval2{1,5},ntest);
 % plot result
-plot_function.plot_prior_constrain_on_delta(pred_with_prior_constraint,z_pred_inadequateModel{5},envir_data);
+plot_function.plot_prior_constrain_on_delta(pred_with_prior_constraint,z_pred_inadequateModel{5},envir_data,ntest);
+
+%% volume ratio
+nsample = 1e6;
+volume_ratio = calculate_function.Volume_ratio_computaion(flag_usedata,spring_data,envir_data,t_data,z_measure,nsample,parameter_posterior_interval2,CMresult);

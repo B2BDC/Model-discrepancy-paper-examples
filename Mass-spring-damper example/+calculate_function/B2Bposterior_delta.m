@@ -27,15 +27,15 @@ else
       ydata = z_measure{i};
       for j = 1:n_poly
          Hc = repmat([-inf inf],j,1);
-         H = [Hk,Hc];
+         H = [Hk;Hc];
          pmin = zeros(1,ndata);
          pmax = zeros(1,ndata);
-         if strcmp(CMresult{i,j},'Dataset is inconsistent')
+         if strcmp(CMresult{i,j+1},'Dataset is inconsistent')
             continue
          else
             c_pos = zeros(j,2);
             for k = 1:j
-               c_pos(k,:) = c_posterior{i,j}(k+1).Posterior_interval;
+               c_pos(k,:) = c_posterior{i,j+1}(k+1).Posterior_interval;
             end
             for k = 1:ndata
                ymin = zeros(n,1);
@@ -44,9 +44,9 @@ else
                flag_max = zeros(n,1);
                xStart = [Hk(1)+rand(2*n,1)*diff(Hk) mean(c_pos,2)'+0.1*diff(c_pos').*randn(2*n,j)];
                for kk = 1:n
-                  [~,ymin(kk),flag_min(kk)] = fmincon(@fun_min,xStart(2*k-1,:)',[],[],[],[],...
+                  [~,ymin(kk),flag_min(kk)] = fmincon(@fun_min,xStart(2*kk-1,:)',[],[],[],[],...
                      H(:,1),H(:,2),@neq,opt);
-                  [~,ymax(kk),flag_max(kk)] = fmincon(@fun_max,xStart(2*k,:)',[],[],[],[],...
+                  [~,ymax(kk),flag_max(kk)] = fmincon(@fun_max,xStart(2*kk,:)',[],[],[],[],...
                      H(:,1),H(:,2),@neq,opt);
                end
                ymin(flag_min<=0) = [];
@@ -87,7 +87,7 @@ end
       c1 = v0/rr;
       dc1 = -c1*drr/rr;
       c = zeros(2*nD,1);
-      g = zeros(nV,2*nD);
+      g = zeros(j+1,2*nD);
       ceq = [];
       geq = [];
       Tfit = supplementary_function.makePower(t_data,j);

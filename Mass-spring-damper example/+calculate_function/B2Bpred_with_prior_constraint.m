@@ -17,14 +17,15 @@ else
    nPred = length(tpred);
    Hk = envir_data.H_k;
    alpha_opt = inf(nPred,1);
-   Hc = zeros(4,1);
+   Hc = zeros(4,2);
    for i = 1:4
       Hc(i,:) = post_interval(i+1).Posterior_interval;
    end
    H = [Hk;Hc];
-   dH = diff(H,[],2);
+   dH = diff(H');
    nV = size(H,1);
    n_poly = nV-1;
+   n = envir_data.n_start;
    xOpt = cell(nPred,1);
    opt = optimoptions('fmincon','Display','off','MaxFunctionEvaluations',1e4,...
       'ConstraintTolerance',1e-6,'OptimalityTolerance',1e-14,'MaxIterations',1e3,...
@@ -32,7 +33,7 @@ else
    for i = 1:nPred
       % minimum |B/M|
       tcond = [t_data;tpred(i)];
-      xStart = [Hk(1)+diff(Hk)*rand(2*n,1) mean(Hc')+diff(Hc')*randn(2*n,n_poly)];
+      xStart = [Hk(1)+diff(Hk)*rand(2*n,1) mean(Hc')+diff(Hc').*randn(2*n,n_poly)];
       xopt = cell(n,1);
       yopt = zeros(n,1);
       flag = zeros(n,1);
@@ -49,10 +50,10 @@ else
          alpha_opt(i) = inf;
       end
    end
-   if any(isinf(yopt))
+   if any(isinf(alpha_opt))
       return
    else
-      alpha_large = 10*alpha_opt;
+      alpha_large = [0.02, 0.05, 0.1];
    end
    yPred = zeros(ntest,2,nPred);
    for i = 1:nPred
@@ -61,7 +62,7 @@ else
       cc = linspace(alpha_opt(i),alpha_large(i),ntest+1);
       cc = cc(2:end);
       for j = 1:ntest
-         xStart = repmat(xOpt{i}',2*n,1)+2e-3*(rand(2*n,nV)-0.5).*repmat(dH',2*n,1);
+         xStart = xOpt{i}'+2e-3*(rand(2*n,nV)-0.5).*dH;
          ymin = zeros(n,1);
          flagmin = zeros(n,1);
          ymax = zeros(n,1);
@@ -151,7 +152,7 @@ end
       g(1,1:nD) = drr*t_data.*(c1*cos(rr*t_data)-c2*sin(rr*t_data))+dc1*sin(rr*t_data);
       g(2:end,1:nD) = Tfit';
       g(:,nD+1:end-1) = -g(:,1:nD); 
-      Tfit = subfun.makePower(tcond,n_poly);
+      Tfit = supplementary_function.makePower(tcond,n_poly);
       delta = Tfit*x(2:end);
       ss = sign(delta);
       c(end) = mean(abs(delta))-cc(j);

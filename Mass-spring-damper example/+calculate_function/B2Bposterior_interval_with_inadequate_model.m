@@ -1,4 +1,4 @@
-function y = B2Bposterior_interval_with_inadequate_model(flag_usedata,spring_data,envir_data,tdata,z_measure)
+function y = B2Bposterior_interval_with_inadequate_model(flag_usedata,spring_data,envir_data,tdata,z_measure,CMresult)
 % Calculate the posterior interval of stiffness k. The B2BDC computation is
 % conducted with the inadequate model.
 
@@ -18,11 +18,11 @@ else
    n_eps = length(eps);
    Hk = envir_data.H_k;
    n_poly = envir_data.n_polytest;
-   y = cell(2,npoly+1);
+   y = cell(2,n_poly+1);
    nD = length(z_measure{1});
    opt = optimoptions('fmincon','Display','off','MaxFunctionEvaluations',1e4,...
       'ConstraintTolerance',1e-6,'OptimalityTolerance',1e-14,'MaxIterations',1e3,...
-      'GradConstr','on','GradObj','on','DerivativeCheck','off','FiniteDifferenceType','central');
+      'GradConstr','on','GradObj','off','DerivativeCheck','on','FiniteDifferenceType','central');
    for i = 1:n_eps
       ydata = z_measure{i};
       for j = 0:n_poly
@@ -30,34 +30,45 @@ else
          H = [Hk;Hc];
          aa = repmat(struct('Parameter_name','','Posterior_interval',[]),1,j+1);
          Tfit = supplementary_function.makePower(tdata,j);
-         for k = 1:j+1
-            x_start = [diff(Hk)*rand(2*n,1)+Hk(1) randn(2*n,k-1)];
-            y_min = zeros(n,1);
-            y_max = zeros(n,1);
-            exitflag_min = zeros(n,1);
-            exitflag_max = zeros(n,1);
-            for kk = 1:n
-               [~,y_min(kk),exitflag_min(kk)] = fmincon(@fun_min,x_start(2*kk-1,:)',[],[],[],[],...
-                  H(:,1),H(:,2),@neq,opt);
-               [~,y_max(kk),exitflag_max(kk)] = fmincon(@fun_max,x_start(2*kk,:)',[],[],[],[],...
-                  H(:,1),H(:,2),@neq,opt);
+         if strcmp(CMresult{i,j+1},'Dataset is inconsistent')
+            for k = 1:j+1
+               if k == 1
+                  aa(k).Parameter_name = 'k';
+               else
+                  aa(k).Parameter_name = ['c' num2str(k-2)];
+               end
+               aa(k).Posterior_interval = [inf -inf];
             end
-            y_min(exitflag_min<=0) = [];
-            y_max(exitflag_max<=0) = [];
-            if k == 1
-               aa(k).Parameter_name = 'k';
-            else
-               aa(k).Parameter_name = ['c' num2str(k-2)];
-            end
-            if isempty(y_min)
-               aa(k).Posterior_interval(1) = inf;
-            else
-               aa(k).Posterior_interval(1) = min(y_min);
-            end
-            if isempty(y_max)
-               aa(k).Posterior_interval(2) = -inf;
-            else
-               aa(k).Posterior_interval(2) = -min(y_max);
+         else
+            for k = 1:j+1
+               x_start = [diff(Hk)*rand(2*n,1)+Hk(1) randn(2*n,j)];
+               y_min = zeros(n,1);
+               y_max = zeros(n,1);
+               exitflag_min = zeros(n,1);
+               exitflag_max = zeros(n,1);
+               for kk = 1:n
+                  [~,y_min(kk),exitflag_min(kk)] = fmincon(@fun_min,x_start(2*kk-1,:)',[],[],[],[],...
+                     H(:,1),H(:,2),@neq,opt);
+                  [~,y_max(kk),exitflag_max(kk)] = fmincon(@fun_max,x_start(2*kk,:)',[],[],[],[],...
+                     H(:,1),H(:,2),@neq,opt);
+               end
+               y_min(exitflag_min<=0) = [];
+               y_max(exitflag_max<=0) = [];
+               if k == 1
+                  aa(k).Parameter_name = 'k';
+               else
+                  aa(k).Parameter_name = ['c' num2str(k-2)];
+               end
+               if isempty(y_min)
+                  aa(k).Posterior_interval(1) = inf;
+               else
+                  aa(k).Posterior_interval(1) = min(y_min);
+               end
+               if isempty(y_max)
+                  aa(k).Posterior_interval(2) = -inf;
+               else
+                  aa(k).Posterior_interval(2) = -min(y_max);
+               end
             end
          end
          y{i,j+1} = aa;
@@ -85,7 +96,7 @@ end
       c1 = v0/rr;
       dc1 = -c1*drr/rr;
       c = zeros(2*nD,1);
-      g = zeros(i+1,2*nD);
+      g = zeros(j+1,2*nD);
       ceq = [];
       geq = [];
       if j == 0
@@ -93,8 +104,8 @@ end
       else
          yy = c1*sin(rr*tdata)+c2*cos(rr*tdata)+Tfit*x(2:end);
       end
-      c(1:nD) = yy-ydata-eps(kk);
-      c(nD+1:end) = ydata-eps(kk)-yy;
+      c(1:nD) = yy-ydata-eps(i);
+      c(nD+1:end) = ydata-eps(i)-yy;
       g(1,1:nD) = drr*tdata.*(c1*cos(rr*tdata)-c2*sin(rr*tdata))+dc1*sin(rr*tdata);
       g(2:end,1:nD) = Tfit';
       g(:,nD+1:end) = -g(:,1:nD);
