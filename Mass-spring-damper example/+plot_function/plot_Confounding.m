@@ -20,13 +20,13 @@ cl = colorbar;
 cl.Ticks = 10*ztick;
 cl.TickLabels = ztick;
 cl.Units = 'normalized';
-cl.Position = [0.4505 0.6024 0.0195 0.3750];
-text(0.8309,-0.0405,'\itk','FontSize',15,'Units','normalized');
-text(0.013,0.0421,'{\itc}_0','FontSize',15,'Units','normalized');
-text(-0.2286,0.6,'{\itc}_1','FontSize',15,'Units','normalized');
+cl.Position = [0.4570 0.5850 0.0195 0.3750];
+text(0.5335,-0.0405,'\itk','FontSize',15,'Units','normalized');
+text(-0.1097,0.0504,'{\itc}_0','FontSize',15,'Units','normalized');
+text(-0.2063,0.6496,'{\itc}_1','FontSize',15,'Units','normalized');
 set(gca,'LineWidth',1.5,'FontSize',12,'XLim',lims(1,:),'YLim',lims(2,:),...
    'ZLim',lims(3,:),'XTick',xtick,'YTick',ytick,'ZTick',ztick,...
-   'Position',[0.09,0.55,0.35,0.42],'View',[-29.3294,23.343466]);
+   'Position',[0.09,0.55,0.35,0.42],'View',[-17.229028831511030,23.343466376044585]);
 % k vs c0
 subplot(2,2,2);
 X = confounding_result.xdata;

@@ -33,6 +33,10 @@ parameter_posterior_interval1 = calculate_function.B2Bposterior_interval_with_tr
 % calculate result
 parameter_posterior_interval2 = calculate_function.B2Bposterior_interval_with_inadequate_model(flag_usedata,spring_data,envir_data,t_data,z_measure,CMresult);
 
+%% volume ratio
+nsample = 1e6;
+volume_ratio = calculate_function.Volume_ratio_computaion(flag_usedata,spring_data,envir_data,t_data,z_measure,nsample,parameter_posterior_interval2,CMresult);
+
 %% model behavior over stiffness prior uncertainty (figure 5)
 plot_function.plot_model_behavior_over_prior(envir_data,t_data,z_measure);
 
@@ -45,7 +49,7 @@ plot_function.plot_Confounding(confounding_mesh);
 
 %% posterior uncertainty of model discrepancy function (figure 7)
 % calculate posterior delta
-n_grid = 501;
+n_grid = 1000;
 tRange = [0 4];
 delta_posterior = calculate_function.B2Bposterior_delta(flag_usedata,spring_data,envir_data,t_data,z_measure,n_grid,CMresult,parameter_posterior_interval2,tRange);
 % plot result
@@ -57,7 +61,3 @@ ntest = 10;
 pred_with_prior_constraint = calculate_function.B2Bpred_with_prior_constraint(flag_usedata,spring_data,envir_data,t_data,z_measure,parameter_posterior_interval2{1,5},ntest);
 % plot result
 plot_function.plot_prior_constrain_on_delta(pred_with_prior_constraint,z_pred_inadequateModel{5},envir_data,ntest);
-
-%% volume ratio
-nsample = 1e6;
-volume_ratio = calculate_function.Volume_ratio_computaion(flag_usedata,spring_data,envir_data,t_data,z_measure,nsample,parameter_posterior_interval2,CMresult);
