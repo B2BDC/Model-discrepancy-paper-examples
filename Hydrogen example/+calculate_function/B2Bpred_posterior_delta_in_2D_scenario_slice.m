@@ -19,11 +19,11 @@ else
 end
 svalue = s_fix.value;
 if strcmpi(s_fix.scenario,'T')
-   fB=@(x)supplementary_function.calBasis([svalue x],n_poly);
+   fB=@(x,n_poly)supplementary_function.calBasis([svalue x],n_poly);
 elseif strcmpi(s_fix.scenario,'P')
-   fB=@(x)supplementary_function.calBasis([x(1) svalue x(2)],n_poly);
+   fB=@(x,n_poly)supplementary_function.calBasis([x(1) svalue x(2)],n_poly);
 elseif strcmpi(s_fix.scenario,'Phi')
-   fB=@(x)supplementary_function.calBasis([x svalue],n_poly);
+   fB=@(x,n_poly)supplementary_function.calBasis([x svalue],n_poly);
 else
    error('Invalid scenario parameter name');
 end
@@ -35,7 +35,7 @@ if ds.isConsistent(opt)
    for i = 1:ngrid
       for j = 1:ngrid
          vecCoef = [vv fB(design_grid([i j]),n_poly)]';
-         predQ = generateModel(vecCoef,vv);
+         predQ = generateModel(vecCoef,ds.Variables);
          pp = ds.predictQOI(predQ,opt);
          y(i,j,:) = [max(pp.min) min(pp.max)];
       end

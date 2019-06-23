@@ -16,7 +16,7 @@ ds = supplementary_function.generateDataset(H2_data,eps,n_poly);
 opt = generateOpt('Display',false,'AddFitError',false,'Prediction','inner');
 
 %% dataset consistency
-opt.OptimOption.RandomStart = 10;
+opt.OptimOption.RandomStart = 5;
 ds.isConsistent(opt);
 
 %% if dataset is feasible, distance of the nominal value from feasible set
